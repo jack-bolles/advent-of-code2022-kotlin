@@ -25,5 +25,4 @@ dependencies{
     testImplementation("io.kotest", "kotest-common-jvm", "5.+")
     testImplementation("dev.mrbergin", "result4k-kotest-matchers" , "1.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
 }
