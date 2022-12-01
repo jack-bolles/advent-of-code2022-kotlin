@@ -1,45 +1,36 @@
-
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.22"
+    application
 }
+
+group = "jb.aoc"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
 }
 
-tasks {
-    sourceSets {
-        main {
-            java.srcDirs("src")
-        }
-    }
-
-    wrapper {
-        gradleVersion = "7.6"
-    }
-
-    test {
-        useJUnitPlatform()
-    }
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "11"
-        }
-    }
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "11"
-        }
-    }
+dependencies {
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.7.22")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:5.5.4")
+    testImplementation("io.kotest:kotest-framework-engine-jvm:5.5.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    testImplementation("org.http4k:http4k-testing-approval:4.34.1.0")
+    testImplementation("org.http4k:http4k-testing-hamkrest:4.34.1.0")
 }
 
-dependencies{
-    implementation("io.kotest", "kotest-assertions-api-jvm", "5.+")
-    implementation("io.kotest", "kotest-assertions-core-jvm", "5.+")
-    implementation("io.kotest", "kotest-assertions-shared-jvm", "5.+")
-    implementation("io.kotest", "kotest-common-jvm", "5.+")
-    implementation("dev.mrbergin", "result4k-kotest-matchers" , "1.0.0")
-    implementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    implementation(kotlin("stdlib-jdk8"))
+tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
+}
+
+application {
+    mainClass.set("MainKt")
 }
