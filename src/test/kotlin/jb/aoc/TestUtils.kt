@@ -1,5 +1,5 @@
 package jb.aoc
 
-fun testInputs(name: String) = inputs(name, "test")
+fun testInputs(day: String) = splitStrings(branch = "test", day = day)
 
 

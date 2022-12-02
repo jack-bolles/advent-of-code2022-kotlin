@@ -4,7 +4,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class DayOneTest {
-    private val caloriesByElf = caloriesByElf(testInputs("day1"))
+    private val caloriesByElf = caloriesByElf(testInputs(day = "day1").shapeForDayOne())
 
     @Test
     fun `part 1 - most caloric elf`() {

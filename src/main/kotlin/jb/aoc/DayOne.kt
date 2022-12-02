@@ -1,30 +1,18 @@
 package jb.aoc
 
 class DayOne {
-    private val input = inputs("day1")
-    private val caloriesByElf = caloriesByElf(input)
-
-    fun part1(): Int {
-        return caloriesByElf.mostCaloricElf().also { println(it) }
-    }
-
-    fun part2(): Int {
-        return caloriesByElf.threeMostCaloricElves().also { println(it) }
-    }
+    private val inputs: SplitInputs = splitStrings(day = "day1").shapeForDayOne()
+    fun part1(): Int = caloriesByElf(inputs).mostCaloricElf() //.also { println(it) }
+    fun part2(): Int = caloriesByElf(inputs).threeMostCaloricElves() //.also { println(it) }
 }
-
 
 fun List<Int>.mostCaloricElf(): Int = max()
 fun List<Int>.threeMostCaloricElves(): Int = sortedDescending().take(3).sum()
 
-fun caloriesByElf(input: String): List<Int> {
-    val joinedLines: String = input.split("\n")
-        .joinToString(prefix = "", postfix = "", separator = "!")
-        { it.ifBlank { "??" } }
+fun caloriesByElf(joinedLines: List<List<String>>): List<Int> =
+    joinedLines.map { list -> list.sumOf { it.toInt() } }  //.also { println(it) }
 
-    return joinedLines.split("??")
-        .map { it.split("!") }
-        .map { it.filter(String::isNotBlank) }
-        .map { list -> list.sumOf { it.toInt() } }
-//        .also { println(it) }
-}
+fun List<String>.shapeForDayOne() = joinToString(prefix = "", postfix = "", separator = "!")
+    { it.ifBlank { "??" } }.split("??")
+    .map { it.split("!") }
+    .map { it.filter(String::isNotBlank) }
