@@ -1,7 +1,6 @@
 package jb.aoc
 
 import jb.aoc.RSP.Companion.play
-import java.lang.IllegalArgumentException
 
 class DayTwo {
     private val input = inputs("day2")
@@ -16,50 +15,34 @@ class DayTwo {
     }
 }
 
-typealias Rochambeau= Pair<RSP, RSP>
+typealias Rochambeau = Pair<RSP, RSP>
 typealias Contest = List<Rochambeau>
 
-fun Contest.totalScore(): Int {
-    return sumOf { it.play() }
-}
+fun Contest.totalScore(): Int = sumOf { it.play() }
 
 fun contest(input: String): List<Rochambeau> =
     input.trim().split("\n")
-    .map { it.split(" ") }
-    .map { Pair(RSP.from(it.first()), RSP.from(it.last())) }
+        .map { it.split(" ") }
+        .map { Pair(RSP.from(it.first()), RSP.from(it.last())) }
 
 enum class RSP {
-    ROCK {
-        override fun versus(other: RSP): Int {
-            return 1 + when (other) {
-                ROCK -> 3
-                PAPER -> 0
-                SCISSORS -> 6
-            }
-        }
-    },
-    PAPER {
-        override fun versus(other: RSP): Int {
-            return 2 + when (other) {
-                ROCK -> 6
-                PAPER -> 3
-                SCISSORS -> 0
-            }
-        }
-    },
-    SCISSORS {
-        override fun versus(other: RSP): Int {
-            return 3 + when (other) {
-                ROCK -> 0
-                PAPER -> 6
-                SCISSORS -> 3
-            }
-        }
-    };
+    ROCK { override fun versus(other: RSP): Int = score(other, 1, PAPER, SCISSORS) },
+    PAPER { override fun versus(other: RSP): Int = score(other, 2, SCISSORS, ROCK) },
+    SCISSORS { override fun versus(other: RSP): Int = score(other, 3, ROCK, PAPER) };
 
     abstract fun versus(other: RSP): Int
 
     companion object {
+        private fun RSP.score(other: RSP, score: Int, losesTo: RSP, beats: RSP) =
+            score + when (other) {
+                this -> 3
+                losesTo -> 0
+                beats -> 6
+                else -> {
+                    throw IllegalArgumentException("huh: $other ?")
+                }
+            }
+
         fun Rochambeau.play() =
             second.versus(first)
 
