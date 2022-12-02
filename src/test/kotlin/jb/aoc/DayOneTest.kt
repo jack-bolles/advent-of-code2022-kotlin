@@ -2,17 +2,18 @@ package jb.aoc
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import java.io.File
 
 class DayOneTest {
     @Test
     fun `part 1 - most caloric elf`() {
-        val mostCaloric = caloriesByElf(day1part1TestInput).mostCaloricElf()
+        val mostCaloric = caloriesByElf(inputs("day1")).mostCaloricElf()
         mostCaloric shouldBe 24000
     }
 
     @Test
     fun `part 2 - three most caloric elves`() {
-        val mostCaloric = caloriesByElf(day1part1TestInput).threeMostCaloricElves()
+        val mostCaloric = caloriesByElf(inputs("day1")).threeMostCaloricElves()
         mostCaloric shouldBe 45000
     }
 
@@ -27,19 +28,5 @@ class DayOneTest {
     }
 }
 
-val day1part1TestInput = """1000
-2000
-3000
-
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000
-"""
+fun inputs (name: String) = File("""src/test/kotlin/jb/aoc/""", "$name-input.txt").readText()
 
