@@ -2,14 +2,14 @@ package jb.aoc
 
 class DayTwo {
     private val inputs: SplitInputs = splitStrings(day = "day2").shapeForDayTwo()
-    fun part1(): Int = contest(inputs, ::partOneParser).totalScore()    //.also { println(it) }
-    fun part2(): Int = contest(inputs, ::partTwoParser).totalScore()    //.also { println(it) }
+    fun part1(): Int = contest(inputs, ::partOneParser).totalOfPriorities()    //.also { println(it) }
+    fun part2(): Int = contest(inputs, ::partTwoParser).totalOfPriorities()    //.also { println(it) }
 }
 
 fun List<String>.shapeForDayTwo(): SplitInputs = map { it.split(" ") }
 
 typealias Contest = List<Rochambeau>
-fun Contest.totalScore(): Int = sumOf { it.play() }
+fun Contest.totalOfPriorities(): Int = sumOf { it.play() }
 val contest: (SplitInputs, Parser) -> Contest =
     { splitInputs, parser -> splitInputs.map { parser(it) } }
 

@@ -17,7 +17,7 @@ class DayTwoTest {
 
     @Test
     fun `part 1 - rochambeau - total score`() {
-        contestPartOne.totalScore() shouldBe 15
+        contestPartOne.totalOfPriorities() shouldBe 15
     }
 
     @Test
@@ -28,7 +28,7 @@ class DayTwoTest {
 
     @Test
     fun `part 2 - rochambeau - total score`() {
-        contestPartTwo.totalScore() shouldBe 12
+        contestPartTwo.totalOfPriorities() shouldBe 12
     }
 
     @Test
