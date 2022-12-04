@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test
 
 class DayFourTest {
     private val splitStrings = splitStrings("test", "day4")
+    private val elfPairings: ElfPairings = splitStrings.shapeForDayFour()
+
 
     @Test
     fun `part 1 - find sections`() {
-        val noOverlap = "2-3,4-5".pairOfSections()
-
-
-        println(noOverlap)
+        val noOverlap = "2-3,4-5".pairSections()
         noOverlap.first.first shouldBe 2
         noOverlap.first.second shouldBe 3
         noOverlap.second.first shouldBe 4
@@ -20,59 +19,35 @@ class DayFourTest {
 
     @Test
     fun `part 1 - find overlapping sections`() {
-        val noOverlap = "2-3,4-5".pairOfSections()
-        val overlap = "25-27,27-29".pairOfSections()
-        overlap.second.first shouldBe 27
-        overlap.first.second shouldBe 27
+        val noOverlap = "2-3,4-5".pairSections()
+        val overlap = "25-27,27-29".pairSections()
+        val consuming = "2-8,3-7".pairSections()
 
         overlap.overlapping() shouldBe true
         noOverlap.overlapping() shouldBe false
+        noOverlap.consuming() shouldBe false
+        consuming.consuming() shouldBe true
     }
 
     @Test
     fun `part 1 - number of completely overlapping assignments`() {
-        val elfPairings = splitStrings
-        elfPairings.map { it.pairOfSections().consuming() }.count { it } shouldBe 2
+        elfPairings.allConsumingCount() shouldBe 2
     }
 
     @Test
     fun `part 2 - number of partially overlapping assignments`() {
-        val elfPairings = splitStrings
-        elfPairings.map { it.pairOfSections().overlapping() }.count { it } shouldBe 4
+        elfPairings.overlappingCount() shouldBe 4
     }
 
     @Test
     fun `day4 part1`() {
-        val elfPairings = splitStrings(day = "day4")
-        elfPairings.map { it.pairOfSections() }.count { it.consuming() } shouldBe 657
+        val elfPairings = splitStrings(day = "day4").shapeForDayFour()
+        elfPairings.count { it.consuming() } shouldBe 657
     }
 
     @Test
     fun `day4 part2`() {
-        val elfPairings = splitStrings(day = "day4")
-        elfPairings.map { it.pairOfSections().overlapping() }.count { it } shouldBe 938
+        val elfPairings = splitStrings(day = "day4").shapeForDayFour()
+        elfPairings.count { it.overlapping() } shouldBe 938
     }
-
-    private fun Pair<Pair<Int, Int>, Pair<Int, Int>>.overlapping(): Boolean {
-        val firstRange = first.first..first.second
-        val secondRange = second.first..second.second
-        return (first.first in secondRange || first.second in secondRange)
-                || (second.first in firstRange || second.second in firstRange)
-
-    }
-
-    private fun Pair<Pair<Int, Int>, Pair<Int, Int>>.consuming(): Boolean {
-        val firstRange = first.first..first.second
-        val secondRange = second.first..second.second
-        return (first.first in secondRange && first.second in secondRange)
-                || (second.first in firstRange && second.second in firstRange)
-
-    }
-
-    private fun String.pairOfSections() =
-        split(",").map { line -> sectionRange(line) }.let { (start, end) -> start to end }
-
-    private fun sectionRange(line: String): Pair<Int, Int> =
-        line.split("-").let { (start, end) -> start.toInt() to end.toInt() }
-
 }
