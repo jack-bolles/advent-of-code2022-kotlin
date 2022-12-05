@@ -19,7 +19,7 @@ class DayFiveTest {
     @Test
     fun `part 1 - move`() {
         val aMove = listOf(DayFive.move("move 1 from 2 to 1"))
-        stacks.arrange(aMove)
+        stacks.arrange9000(aMove)
         stacks[0] shouldBe listOf("[Z]", "[N]", "[D]")
         stacks[1] shouldBe listOf("[M]", "[C]")
         stacks[2] shouldBe listOf("[P]")
@@ -27,7 +27,7 @@ class DayFiveTest {
 
     @Test
     fun `part 1 - top of stacks`() {
-        stacks.arrange(moves(splitStrings)) shouldBe "CMZ"
+        stacks.arrange9000(moves(splitStrings)) shouldBe "CMZ"
     }
 
     @Test
@@ -36,7 +36,7 @@ class DayFiveTest {
         val stacks = stacks(inputs)
         val moves = moves(inputs)
 
-        stacks.arrange(moves) shouldBe "CNSZFDVLJ"
+        stacks.arrange9000(moves).topOfTheStacks() shouldBe "CNSZFDVLJ"
     }
 
     @Test
@@ -45,6 +45,6 @@ class DayFiveTest {
         val stacks = stacks(inputs)
         val moves = moves(inputs)
 
-        stacks.arrange9001(moves) shouldBe "QNDWLMGNS"
+        stacks.arrange9001(moves).topOfTheStacks() shouldBe "QNDWLMGNS"
     }
 }

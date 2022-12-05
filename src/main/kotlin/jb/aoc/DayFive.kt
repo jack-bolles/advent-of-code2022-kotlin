@@ -5,7 +5,8 @@ class DayFive {
     private val stacks = stacks(inputs)
     private val moves = moves(inputs)
 
-    fun part1(): String = stacks.arrange(moves) //.also { println(it) }
+    fun part1(): String = stacks.arrange9000(moves).topOfTheStacks() //.also { println(it) }
+    fun part2(): String = stacks.arrange9001(moves).topOfTheStacks() //.also { println(it) }
 
     companion object {
         fun stacks(inputs: List<String>): Array<List<String>> {
@@ -44,16 +45,16 @@ typealias Stacks = Array<Stack>
 typealias Stack = List<String>
 typealias Move = Triple<Int, Int, Int>
 
-fun Stacks.arrange(moves: List<Move>): String {
+fun Stacks.arrange9000(moves: List<Move>): Stacks {
     moves.forEach { makeMove(it) }
-    return getResult()
+    return this
 }
-fun Stacks.arrange9001(moves: List<Move>): String {
+fun Stacks.arrange9001(moves: List<Move>): Stacks {
     moves.forEach { makeMove9001(it) }
-    return getResult()
+    return this
 }
 
-private fun Stacks.getResult(): String {
+fun Stacks.topOfTheStacks(): String {
     return this.map { it.lastOrNull() }
         .joinToString("")
         .replace("[", "").replace("]", "")
