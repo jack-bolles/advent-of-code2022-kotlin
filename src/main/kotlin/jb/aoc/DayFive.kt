@@ -48,6 +48,10 @@ fun Stacks.arrange(moves: List<Move>): String {
     moves.forEach { makeMove(it) }
     return getResult()
 }
+fun Stacks.arrange9001(moves: List<Move>): String {
+    moves.forEach { makeMove9001(it) }
+    return getResult()
+}
 
 private fun Stacks.getResult(): String {
     return this.map { it.lastOrNull() }
@@ -62,3 +66,12 @@ private fun Stacks.makeMove(move: Move): Array<List<String>> {
     this[toStack] = this[toStack] + chunks
     return this
 }
+
+fun Array<List<String>>.makeMove9001(move: Move): Array<List<String>> {
+    val (numberToMove, fromStack, toStack) = move
+    val chunks: List<String> = this[fromStack].takeLast(numberToMove)
+    this[fromStack] = this[fromStack].dropLast(numberToMove)
+    this[toStack] = this[toStack] + chunks
+    return this
+}
+

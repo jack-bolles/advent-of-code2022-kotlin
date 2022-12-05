@@ -1,6 +1,7 @@
 package jb.aoc
 
 import io.kotest.matchers.shouldBe
+import jb.aoc.DayFive.Companion.moves
 import jb.aoc.DayFive.Companion.stacks
 import org.junit.jupiter.api.Test
 
@@ -26,15 +27,24 @@ class DayFiveTest {
 
     @Test
     fun `part 1 - top of stacks`() {
-        stacks.arrange(DayFive.moves(splitStrings)) shouldBe "CMZ"
+        stacks.arrange(moves(splitStrings)) shouldBe "CMZ"
     }
 
     @Test
-    fun `day 5 part 1 - top of the stacks`() {
+    fun `day 5 part 1 - Crane 9000`() {
         val inputs = splitStrings(day = "day5", shouldTrim = false)
         val stacks = stacks(inputs)
-        val moves = DayFive.moves(inputs)
+        val moves = moves(inputs)
 
         stacks.arrange(moves) shouldBe "CNSZFDVLJ"
+    }
+
+    @Test
+    fun `day 5 part 2 - Crane 9001`() {
+        val inputs = splitStrings(day = "day5", shouldTrim = false)
+        val stacks = stacks(inputs)
+        val moves = moves(inputs)
+
+        stacks.arrange9001(moves) shouldBe "QNDWLMGNS"
     }
 }
