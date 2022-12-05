@@ -17,8 +17,10 @@ fun main() {
 
 typealias SplitInputs = List<List<String>>
 
-fun splitStrings(branch: String = "main", day: String) =
-    inputs(branch = branch, day = day).split("\n")
+fun splitStrings(branch: String = "main", day: String, shouldTrim: Boolean = true) =
+    inputs(branch = branch, day = day, shouldTrim = shouldTrim).split("\n")
 
-private fun inputs(branch: String = "main", day: String) =
-    File("src/$branch/kotlin/jb/aoc/", "$day-input.txt").readText().trim()
+private fun inputs(branch: String = "main", day: String, shouldTrim: Boolean = true): String {
+    val text = File("src/$branch/kotlin/jb/aoc/", "$day-input.txt").readText()
+    return if (shouldTrim) text.trim() else text
+}
