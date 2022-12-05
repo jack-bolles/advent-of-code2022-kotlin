@@ -1,6 +1,7 @@
 package jb.aoc
 
 import io.kotest.matchers.shouldBe
+import jb.aoc.Crane.*
 import jb.aoc.DayFive.Companion.moves
 import jb.aoc.DayFive.Companion.stacks
 import org.junit.jupiter.api.Test
@@ -19,7 +20,7 @@ class DayFiveTest {
     @Test
     fun `part 1 - move`() {
         val aMove = listOf(DayFive.move("move 1 from 2 to 1"))
-        stacks.arrange(aMove)
+        Crane9000().arrange(stacks, aMove)
         stacks[0] shouldBe listOf("[Z]", "[N]", "[D]")
         stacks[1] shouldBe listOf("[M]", "[C]")
         stacks[2] shouldBe listOf("[P]")
@@ -27,7 +28,9 @@ class DayFiveTest {
 
     @Test
     fun `part 1 - top of stacks`() {
-        stacks.arrange(moves(splitStrings)) shouldBe "CMZ"
+        val stacks = stacks(splitStrings)
+        val moves = moves(splitStrings)
+        Crane9000().arrange(stacks, moves).topOfTheStacks() shouldBe "CMZ"
     }
 
     @Test
@@ -36,7 +39,7 @@ class DayFiveTest {
         val stacks = stacks(inputs)
         val moves = moves(inputs)
 
-        stacks.arrange(moves) shouldBe "CNSZFDVLJ"
+        Crane9000().arrange(stacks, moves).topOfTheStacks() shouldBe "CNSZFDVLJ"
     }
 
     @Test
@@ -45,6 +48,6 @@ class DayFiveTest {
         val stacks = stacks(inputs)
         val moves = moves(inputs)
 
-        stacks.arrange9001(moves) shouldBe "QNDWLMGNS"
+        Crane9001().arrange(stacks, moves).topOfTheStacks() shouldBe "QNDWLMGNS"
     }
 }

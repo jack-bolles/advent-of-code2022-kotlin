@@ -1,11 +1,15 @@
 package jb.aoc
 
+import jb.aoc.Crane.*
+
+
 class DayFive {
     private val inputs: List<String> = splitStrings(day = "day5")
     private val stacks = stacks(inputs)
     private val moves = moves(inputs)
 
-    fun part1(): String = stacks.arrange(moves) //.also { println(it) }
+    fun part1(): String = Crane9000().arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
+    fun part2(): String = Crane9001().arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
 
     companion object {
         fun stacks(inputs: List<String>): Array<List<String>> {
@@ -44,22 +48,29 @@ typealias Stacks = Array<Stack>
 typealias Stack = List<String>
 typealias Move = Triple<Int, Int, Int>
 
-fun Stacks.arrange(moves: List<Move>): String {
-    moves.forEach { makeMove(it) }
-    return getResult()
-}
-fun Stacks.arrange9001(moves: List<Move>): String {
-    moves.forEach { makeMove9001(it) }
-    return getResult()
+interface Crane {
+    fun arrange(stacks: Stacks, moves: List<Move>): Stacks
+    class Crane9000 :Crane {
+        override fun arrange(stacks: Stacks, moves: List<Move>): Stacks {
+            moves.forEach { stacks.makeMove9000(it) }
+            return stacks
+        }
+    }
+    class Crane9001 : Crane {
+        override fun arrange(stacks: Stacks, moves: List<Move>): Stacks {
+            moves.forEach { stacks.makeMove9001(it) }
+            return stacks
+        }
+    }
 }
 
-private fun Stacks.getResult(): String {
+fun Stacks.topOfTheStacks(): String {
     return this.map { it.lastOrNull() }
         .joinToString("")
         .replace("[", "").replace("]", "")
 }
 
-private fun Stacks.makeMove(move: Move): Array<List<String>> {
+private fun Stacks.makeMove9000(move: Move): Array<List<String>> {
     val (numberToMove, fromStack, toStack) = move
     val chunks: List<String> = this[fromStack].takeLast(numberToMove).reversed()
     this[fromStack] = this[fromStack].dropLast(numberToMove)
