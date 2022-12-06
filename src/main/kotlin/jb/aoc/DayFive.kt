@@ -5,19 +5,19 @@ import jb.aoc.Crane.*
 
 class DayFive {
     private val inputs: List<String> = splitStrings(day = "day5")
-    private val stacks = stacks(inputs)
-    private val moves = moves(inputs)
+    private val stacks = stacksFrom(inputs)
+    private val moves = movesFrom(inputs)
 
     fun part1(): String = Crane9000.arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
     fun part2(): String = Crane9001.arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
 
     companion object {
-        fun stacks(inputs: List<String>): Array<List<String>> {
-            fun pivot(stacks: List<List<String>>): Array<List<String>> {
-                val numberOfStacks = stacks.maxOfOrNull { it: List<String> -> it.size }!!
+        fun stacksFrom(inputs: List<String>): Stacks {
+            fun pivot(rawLines: List<List<String>>): Stacks {
+                val numberOfStacks = rawLines.maxOfOrNull { it: List<String> -> it.size }!!
                 val arrayOfStacks = Array(numberOfStacks) { emptyList<String>() }
 
-                stacks.forEach { aStack ->
+                rawLines.forEach { aStack ->
                     aStack.forEachIndexed { i, v ->
                         if (v.isNotBlank()) arrayOfStacks[i] = arrayOfStacks[i].plus(v)
                     }
@@ -25,18 +25,18 @@ class DayFive {
                 return arrayOfStacks
             }
 
-            val stackLines: List<List<String>> = inputs
+            val rawLines: List<List<String>> = inputs
                 .filter { it: String -> it.contains("[") }
                 .map { it: String -> it.chunked(4).map { it.trim() } }
                 .reversed()
-            return pivot(stackLines)
+            return pivot(rawLines)
         }
 
-        fun moves(splitStrings: List<String>) = splitStrings
+        fun movesFrom(splitStrings: List<String>) = splitStrings
                 .filter { it.startsWith("move") }
-                .map { move(it) }
+                .map { moveFrom(it) }
 
-        fun move(raw: String): Move {
+        fun moveFrom(raw: String): Move {
             val split = raw.split(" ")
             val numberToMove = split[1].toInt()
             val fromStack = split[3].toInt() - 1
@@ -58,20 +58,20 @@ sealed interface Crane {
 
     fun makeMove(stacks: Stacks, move: Move): Stacks {
         val (numberToMove, fromStack, toStack) = move
-        stacks[toStack] = stacks[toStack] + extract(stacks[fromStack], numberToMove)
+        stacks[toStack] = stacks[toStack] + extractCrates(stacks[fromStack], numberToMove)
         stacks[fromStack] = stacks[fromStack].dropLast(numberToMove)
         return stacks
     }
 
-    fun extract(takeFrom: Stack, numberToMove: Int): List<String>
+    fun extractCrates(takeFrom: Stack, numberToMove: Int): List<String>
 
     object Crane9000 : Crane {
-        override fun extract(takeFrom: Stack, numberToMove: Int) =
+        override fun extractCrates(takeFrom: Stack, numberToMove: Int) =
             takeFrom.takeLast(numberToMove).reversed()
     }
 
     object Crane9001 : Crane {
-        override fun extract(takeFrom: Stack, numberToMove: Int) =
+        override fun extractCrates(takeFrom: Stack, numberToMove: Int) =
             takeFrom.takeLast(numberToMove)
     }
 }
