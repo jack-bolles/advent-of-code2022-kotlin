@@ -8,8 +8,8 @@ class DayFive {
     private val stacks = stacks(inputs)
     private val moves = moves(inputs)
 
-    fun part1(): String = Crane9000().arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
-    fun part2(): String = Crane9001().arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
+    fun part1(): String = Crane9000.arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
+    fun part2(): String = Crane9001.arrange(stacks, moves).topOfTheStacks() //.also { println(it) }
 
     companion object {
         fun stacks(inputs: List<String>): Array<List<String>> {
@@ -32,7 +32,9 @@ class DayFive {
             return pivot(stackLines)
         }
 
-        fun moves(splitStrings: List<String>) = splitStrings.filter { it.startsWith("move") }.map { move(it) }
+        fun moves(splitStrings: List<String>) = splitStrings
+                .filter { it.startsWith("move") }
+                .map { move(it) }
 
         fun move(raw: String): Move {
             val split = raw.split(" ")
@@ -48,19 +50,29 @@ typealias Stacks = Array<Stack>
 typealias Stack = List<String>
 typealias Move = Triple<Int, Int, Int>
 
-interface Crane {
-    fun arrange(stacks: Stacks, moves: List<Move>): Stacks
-    class Crane9000 :Crane {
-        override fun arrange(stacks: Stacks, moves: List<Move>): Stacks {
-            moves.forEach { stacks.makeMove9000(it) }
-            return stacks
-        }
+sealed interface Crane {
+    fun arrange(stacks: Stacks, moves: List<Move>): Stacks {
+        moves.forEach { makeMove(stacks, it) }
+        return stacks
     }
-    class Crane9001 : Crane {
-        override fun arrange(stacks: Stacks, moves: List<Move>): Stacks {
-            moves.forEach { stacks.makeMove9001(it) }
-            return stacks
-        }
+
+    fun makeMove(stacks: Stacks, move: Move): Stacks {
+        val (numberToMove, fromStack, toStack) = move
+        stacks[toStack] = stacks[toStack] + extract(stacks[fromStack], numberToMove)
+        stacks[fromStack] = stacks[fromStack].dropLast(numberToMove)
+        return stacks
+    }
+
+    fun extract(takeFrom: Stack, numberToMove: Int): List<String>
+
+    object Crane9000 : Crane {
+        override fun extract(takeFrom: Stack, numberToMove: Int) =
+            takeFrom.takeLast(numberToMove).reversed()
+    }
+
+    object Crane9001 : Crane {
+        override fun extract(takeFrom: Stack, numberToMove: Int) =
+            takeFrom.takeLast(numberToMove)
     }
 }
 
@@ -69,20 +81,3 @@ fun Stacks.topOfTheStacks(): String {
         .joinToString("")
         .replace("[", "").replace("]", "")
 }
-
-private fun Stacks.makeMove9000(move: Move): Array<List<String>> {
-    val (numberToMove, fromStack, toStack) = move
-    val chunks: List<String> = this[fromStack].takeLast(numberToMove).reversed()
-    this[fromStack] = this[fromStack].dropLast(numberToMove)
-    this[toStack] = this[toStack] + chunks
-    return this
-}
-
-fun Array<List<String>>.makeMove9001(move: Move): Array<List<String>> {
-    val (numberToMove, fromStack, toStack) = move
-    val chunks: List<String> = this[fromStack].takeLast(numberToMove)
-    this[fromStack] = this[fromStack].dropLast(numberToMove)
-    this[toStack] = this[toStack] + chunks
-    return this
-}
-
